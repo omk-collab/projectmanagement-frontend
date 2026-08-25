@@ -1,25 +1,49 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { loginUser } from "../api/auth.api";
+import { useAuth } from "../context/AuthContext";
 
 function Login() {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({ email: "", password: "" });
+
+  // AuthContext se setUser function le rahe hain
+  const { setUser } = useAuth();
+
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     setError("");
     setLoading(true);
+
     try {
+      // Backend ko login request
       const res = await loginUser(formData);
+
+      // Backend response se user nikalna
       const { user } = res.data.data;
+
+      // ⭐ AuthContext ke andar user save karna
+      setUser(user);
+
+      // LocalStorage me bhi user save
       localStorage.setItem("user", JSON.stringify(user));
+
+      // Dashboard par redirect
       navigate("/dashboard");
     } catch (err) {
       setError(err.response?.data?.message || "Login failed");
@@ -32,15 +56,18 @@ function Login() {
     <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
       <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-8">
         <h2 className="text-2xl font-bold text-gray-800 mb-1">Welcome back</h2>
+
         <p className="text-sm text-gray-500 mb-6">
           Login to continue to Project Camp
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Email */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Email
             </label>
+
             <input
               type="email"
               name="email"
@@ -52,10 +79,12 @@ function Login() {
             />
           </div>
 
+          {/* Password */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Password
             </label>
+
             <input
               type="password"
               name="password"
@@ -67,12 +96,14 @@ function Login() {
             />
           </div>
 
+          {/* Error */}
           {error && (
             <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
               {error}
             </p>
           )}
 
+          {/* Login button */}
           <button
             type="submit"
             disabled={loading}
@@ -82,6 +113,7 @@ function Login() {
           </button>
         </form>
 
+        {/* Register */}
         <p className="text-sm text-gray-600 mt-6 text-center">
           New here?{" "}
           <Link
