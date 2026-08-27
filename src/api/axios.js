@@ -8,7 +8,6 @@ const api = axios.create({
   },
 });
 
-// Har request me stored token attach kar
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem("accessToken");
   if (token) {
@@ -17,7 +16,6 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// 401 aane pe refresh token try kar
 let isRefreshing = false;
 
 api.interceptors.response.use(
@@ -25,17 +23,31 @@ api.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
+    const isAuthRoute =
+      originalRequest.url.includes("/auth/refresh-token") ||
+      originalRequest.url.includes("/auth/login") ||
+      originalRequest.url.includes("/auth/register");
+
     if (
       error.response?.status === 401 &&
       !originalRequest._retry &&
-      !originalRequest.url.includes("/auth/refresh-token") &&
-      !originalRequest.url.includes("/auth/login")
+      !isAuthRoute
     ) {
       originalRequest._retry = true;
+
+      const refreshToken = localStorage.getItem("refreshToken");
+
+      // Agar refresh token hai hi nahi, retry karne ka koi fayda nahi
+      if (!refreshToken) {
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
+        localStorage.removeItem("user");
+        return Promise.reject(error);
+      }
+
       if (!isRefreshing) {
         isRefreshing = true;
         try {
-          const refreshToken = localStorage.getItem("refreshToken");
           const res = await api.post("/auth/refresh-token", { refreshToken });
           const newAccessToken = res.data.data.accessToken;
           localStorage.setItem("accessToken", newAccessToken);
@@ -48,7 +60,8 @@ api.interceptors.response.use(
           isRefreshing = false;
           localStorage.removeItem("accessToken");
           localStorage.removeItem("refreshToken");
-          window.location.href = "/login";
+          localStorage.removeItem("user");
+          // window.location.href hata diya — hard reload loop ka karan tha
           return Promise.reject(refreshError);
         }
       }
