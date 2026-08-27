@@ -3,8 +3,10 @@ import { useNavigate, Link } from "react-router-dom";
 import { loginUser } from "../api/auth.api";
 import { useAuth } from "../context/AuthContext";
 
+
 function Login() {
   const navigate = useNavigate();
+  const { refetchUser } = useAuth();
 
   // AuthContext se setUser function le rahe hain
   const { setUser } = useAuth();
@@ -34,6 +36,7 @@ const handleSubmit = async (e) => {
     localStorage.setItem("accessToken", accessToken);
     localStorage.setItem("refreshToken", refreshToken);
     localStorage.setItem("user", JSON.stringify(user));
+    await refetchUser();
     navigate("/dashboard");
   } catch (err) {
     setError(err.response?.data?.message || "Login failed");
@@ -41,7 +44,6 @@ const handleSubmit = async (e) => {
     setLoading(false);
   }
 };
-
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
       <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-8">
