@@ -46,17 +46,19 @@ function Dashboard() {
     }
   };
 
-  const handleLogout = async () => {
-    try {
-      await logoutUser();
-    } catch (err) {
-      // ignore
-    } finally {
-      setUser(null);
-      navigate("/login");
-    }
-  };
-
+const handleLogout = async () => {
+  try {
+    await logoutUser();
+  } catch (err) {
+    // ignore
+  } finally {
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+    localStorage.removeItem("user");
+    setUser(null);
+    navigate("/login");
+  }
+};
   return (
     <div className="min-h-screen bg-gray-100">
       <Navbar />

@@ -24,33 +24,23 @@ function Login() {
     });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    setError("");
-    setLoading(true);
-
-    try {
-      // Backend ko login request
-      const res = await loginUser(formData);
-
-      // Backend response se user nikalna
-      const { user } = res.data.data;
-
-      // ⭐ AuthContext ke andar user save karna
-      setUser(user);
-
-      // LocalStorage me bhi user save
-      localStorage.setItem("user", JSON.stringify(user));
-
-      // Dashboard par redirect
-      navigate("/dashboard");
-    } catch (err) {
-      setError(err.response?.data?.message || "Login failed");
-    } finally {
-      setLoading(false);
-    }
-  };
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setError("");
+  setLoading(true);
+  try {
+    const res = await loginUser(formData);
+    const { user, accessToken, refreshToken } = res.data.data;
+    localStorage.setItem("accessToken", accessToken);
+    localStorage.setItem("refreshToken", refreshToken);
+    localStorage.setItem("user", JSON.stringify(user));
+    navigate("/dashboard");
+  } catch (err) {
+    setError(err.response?.data?.message || "Login failed");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
