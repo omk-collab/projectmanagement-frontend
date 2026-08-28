@@ -7,6 +7,7 @@ import { useAuth } from "../context/AuthContext";
 function Login() {
   const navigate = useNavigate();
   const { refetchUser } = useAuth();
+  const [showPassword, setShowPassword] = useState(false);
 
   // AuthContext se setUser function le rahe hain
   const { setUser } = useAuth();
@@ -39,7 +40,20 @@ const handleSubmit = async (e) => {
     await refetchUser();
     navigate("/dashboard");
   } catch (err) {
-    setError(err.response?.data?.message || "Login failed");
+    console.log("FULL ERROR:", err);
+
+    const data = err.response?.data;
+
+    if (typeof data === "string" && data.includes("Please verify your email")) {
+      setError("Please verify your email before logging in");
+    } else if (
+      typeof data === "string" &&
+      data.includes("Invalid credentials")
+    ) {
+      setError("Invalid credentials");
+    } else {
+      setError(data?.message || "Login failed");
+    }
   } finally {
     setLoading(false);
   }
@@ -72,20 +86,24 @@ const handleSubmit = async (e) => {
           </div>
 
           {/* Password */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Password
-            </label>
-
+          <div className="relative">
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}
               name="password"
               placeholder="••••••••"
               value={formData.password}
               onChange={handleChange}
               required
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 pr-12 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
+
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+            >
+              {showPassword ? "🙈" : "👁️"}
+            </button>
           </div>
 
           {/* Error */}
