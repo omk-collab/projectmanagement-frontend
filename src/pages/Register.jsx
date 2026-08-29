@@ -1,9 +1,12 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { registerUser } from "../api/auth.api";
+import AuthVisualPanel from "../components/auth/AuthVisualPanel";
+import Spinner from "../components/common/Spinner";
 
 function Register() {
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     username: "",
@@ -27,97 +30,125 @@ function Register() {
       setSuccessMsg(res.data.message);
       setTimeout(() => navigate("/login"), 2500);
     } catch (err) {
-      setError(err.response?.data?.message || "Registration failed");
+      if (err.request && !err.response) {
+        setError("Server is waking up, please try again in a few seconds.");
+      } else {
+        setError(err.response?.data?.message || "Registration failed");
+      }
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
-      <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-8">
-        <h2 className="text-2xl font-bold text-gray-800 mb-1">
-          Create your account
-        </h2>
-        <p className="text-sm text-gray-500 mb-6">
-          Join Project Camp to start managing your projects
-        </p>
+    <div className="min-h-screen flex bg-white">
+      <AuthVisualPanel />
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Username
-            </label>
-            <input
-              type="text"
-              name="username"
-              placeholder="e.g. omkha"
-              value={formData.username}
-              onChange={handleChange}
-              required
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Email
-            </label>
-            <input
-              type="email"
-              name="email"
-              placeholder="you@example.com"
-              value={formData.email}
-              onChange={handleChange}
-              required
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Password
-            </label>
-            <input
-              type="password"
-              name="password"
-              placeholder="••••••••"
-              value={formData.password}
-              onChange={handleChange}
-              required
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-
-          {error && (
-            <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
-              {error}
-            </p>
-          )}
-          {successMsg && (
-            <p className="text-sm text-green-700 bg-green-50 border border-green-200 rounded-lg px-3 py-2">
-              {successMsg}
-            </p>
-          )}
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-60 text-white font-medium py-2.5 rounded-lg transition"
-          >
-            {loading ? "Registering..." : "Register"}
-          </button>
-        </form>
-
-        <p className="text-sm text-gray-600 mt-6 text-center">
-          Already have an account?{" "}
+      <div className="w-full lg:w-1/2 flex items-center justify-center px-6 py-12">
+        <div className="w-full max-w-sm">
           <Link
-            to="/login"
-            className="text-blue-600 font-medium hover:underline"
+            to="/"
+            className="lg:hidden block text-center text-sm font-semibold text-slate-900 mb-8 tracking-tight"
           >
-            Login
+            Project Camp
           </Link>
-        </p>
+
+          <h2 className="text-2xl font-semibold text-slate-900 mb-1">
+            Create your account
+          </h2>
+          <p className="text-sm text-slate-500 mb-8">
+            Join Project Camp to start managing your projects
+          </p>
+
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1">
+                Username
+              </label>
+              <input
+                type="text"
+                name="username"
+                placeholder="e.g. omkha"
+                value={formData.username}
+                onChange={handleChange}
+                required
+                disabled={loading}
+                className="w-full px-3 py-2.5 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-400 disabled:bg-slate-50 text-sm"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1">
+                Email
+              </label>
+              <input
+                type="email"
+                name="email"
+                placeholder="you@example.com"
+                value={formData.email}
+                onChange={handleChange}
+                required
+                disabled={loading}
+                className="w-full px-3 py-2.5 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-400 disabled:bg-slate-50 text-sm"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1">
+                Password
+              </label>
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  placeholder="••••••••"
+                  value={formData.password}
+                  onChange={handleChange}
+                  required
+                  disabled={loading}
+                  className="w-full px-3 py-2.5 pr-11 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-400 disabled:bg-slate-50 text-sm"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-xs"
+                >
+                  {showPassword ? "Hide" : "Show"}
+                </button>
+              </div>
+            </div>
+
+            {error && (
+              <p className="text-sm text-red-700 bg-red-50 border border-red-200 rounded-md px-3 py-2">
+                {error}
+              </p>
+            )}
+            {successMsg && (
+              <p className="text-sm text-green-700 bg-green-50 border border-green-200 rounded-md px-3 py-2">
+                {successMsg}
+              </p>
+            )}
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-slate-900 hover:bg-slate-800 disabled:opacity-60 text-white text-sm font-medium py-2.5 rounded-md transition flex items-center justify-center gap-2"
+            >
+              {loading && <Spinner />}
+              {loading ? "Registering..." : "Register"}
+            </button>
+          </form>
+
+          <p className="text-sm text-slate-600 mt-8 text-center">
+            Already have an account?{" "}
+            <Link
+              to="/login"
+              className="text-slate-900 font-medium underline underline-offset-2"
+            >
+              Login
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );

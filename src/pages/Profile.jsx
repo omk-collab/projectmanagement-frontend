@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { updateAvatar } from "../api/auth.api";
 import { useAuth } from "../context/AuthContext";
+import Spinner from "../components/common/Spinner";
+import { ArrowLeft, Camera } from "lucide-react";
 
 function Profile() {
   const navigate = useNavigate();
@@ -15,9 +17,7 @@ function Profile() {
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-
     if (!file) return;
-
     setSelectedFile(file);
     setPreview(URL.createObjectURL(file));
     setMessage("");
@@ -29,24 +29,18 @@ function Profile() {
       setError("Please select an image first");
       return;
     }
-
     setLoading(true);
     setError("");
     setMessage("");
-
     try {
       const formData = new FormData();
       formData.append("avatar", selectedFile);
-
       const res = await updateAvatar(formData);
-
       const updatedUser = res.data.data;
-
       setUser(updatedUser);
       localStorage.setItem("user", JSON.stringify(updatedUser));
-
       setSelectedFile(null);
-      setMessage("Avatar updated successfully ✅");
+      setMessage("Avatar updated successfully");
     } catch (err) {
       setError(err.response?.data?.message || "Failed to update avatar");
     } finally {
@@ -55,80 +49,88 @@ function Profile() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4">
-      <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-8">
-        {/* Back */}
-        <button
-          onClick={() => navigate("/dashboard")}
-          className="text-sm text-gray-500 hover:text-gray-800 mb-6"
-        >
-          ← Back to Dashboard
-        </button>
-
-        <h2 className="text-2xl font-bold text-gray-800 text-center mb-6">
-          My Profile
-        </h2>
-
-        {/* Avatar */}
-        <div className="flex flex-col items-center">
-          <img
-            src={preview || "https://placehold.co/200x200"}
-            alt="Profile"
-            className="w-32 h-32 rounded-full object-cover border-4 border-gray-200 shadow"
-          />
-
-          {/* Select Image */}
-          <label className="mt-5 cursor-pointer bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-lg text-sm font-medium">
-            Change Avatar
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleFileChange}
-              className="hidden"
-            />
-          </label>
-
-          {/* Upload */}
-          {selectedFile && (
-            <button
-              onClick={handleUpload}
-              disabled={loading}
-              className="mt-3 bg-blue-600 hover:bg-blue-700 disabled:opacity-60 text-white px-5 py-2 rounded-lg"
-            >
-              {loading ? "Uploading..." : "Upload Avatar"}
-            </button>
-          )}
-
-          {/* Success */}
-          {message && (
-            <p className="mt-4 text-sm text-green-600 bg-green-50 px-4 py-2 rounded-lg">
-              {message}
-            </p>
-          )}
-
-          {/* Error */}
-          {error && (
-            <p className="mt-4 text-sm text-red-600 bg-red-50 px-4 py-2 rounded-lg">
-              {error}
-            </p>
-          )}
+    <div className="min-h-screen bg-slate-50">
+      <nav className="border-b border-slate-200 bg-white">
+        <div className="max-w-3xl mx-auto px-6 h-16 flex items-center">
+          <button
+            onClick={() => navigate("/dashboard")}
+            className="text-sm text-slate-500 hover:text-slate-900 flex items-center gap-1.5 transition"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Back to Dashboard
+          </button>
         </div>
+      </nav>
 
-        {/* User Information */}
-        <div className="mt-8 space-y-4">
-          <div>
-            <p className="text-xs text-gray-500">Username</p>
-            <p className="font-medium text-gray-800">{user?.username || "—"}</p>
+      <div className="max-w-3xl mx-auto px-6 py-10">
+        <h1
+          className="text-2xl font-semibold text-slate-900 mb-8"
+          style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+        >
+          My Profile
+        </h1>
+
+        <div className="bg-white border border-slate-200 rounded-lg p-8">
+          <div className="flex flex-col items-center">
+            <div className="relative">
+              <img
+                src={preview || "https://placehold.co/200x200"}
+                alt="Profile"
+                className="w-28 h-28 rounded-full object-cover border-4 border-slate-100"
+              />
+              <label className="absolute bottom-0 right-0 w-8 h-8 rounded-full bg-slate-900 hover:bg-slate-800 flex items-center justify-center cursor-pointer transition">
+                <Camera className="w-4 h-4 text-white" />
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                  className="hidden"
+                />
+              </label>
+            </div>
+
+            {selectedFile && (
+              <button
+                onClick={handleUpload}
+                disabled={loading}
+                className="mt-5 bg-slate-900 hover:bg-slate-800 disabled:opacity-60 text-white text-sm font-medium px-5 py-2 rounded-md transition flex items-center gap-2"
+              >
+                {loading && <Spinner />}
+                {loading ? "Uploading..." : "Upload Avatar"}
+              </button>
+            )}
+
+            {message && (
+              <p className="mt-4 text-sm text-green-700 bg-green-50 border border-green-200 px-4 py-2 rounded-md">
+                {message}
+              </p>
+            )}
+            {error && (
+              <p className="mt-4 text-sm text-red-700 bg-red-50 border border-red-200 px-4 py-2 rounded-md">
+                {error}
+              </p>
+            )}
           </div>
 
-          <div>
-            <p className="text-xs text-gray-500">Full Name</p>
-            <p className="font-medium text-gray-800">{user?.fullName || "—"}</p>
-          </div>
-
-          <div>
-            <p className="text-xs text-gray-500">Email</p>
-            <p className="font-medium text-gray-800">{user?.email || "—"}</p>
+          <div className="mt-10 divide-y divide-slate-100">
+            <div className="py-3 flex justify-between">
+              <p className="text-sm text-slate-500">Username</p>
+              <p className="text-sm font-medium text-slate-900">
+                {user?.username || "—"}
+              </p>
+            </div>
+            <div className="py-3 flex justify-between">
+              <p className="text-sm text-slate-500">Full Name</p>
+              <p className="text-sm font-medium text-slate-900">
+                {user?.fullName || "—"}
+              </p>
+            </div>
+            <div className="py-3 flex justify-between">
+              <p className="text-sm text-slate-500">Email</p>
+              <p className="text-sm font-medium text-slate-900">
+                {user?.email || "—"}
+              </p>
+            </div>
           </div>
         </div>
       </div>
