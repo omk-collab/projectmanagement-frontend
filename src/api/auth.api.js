@@ -7,6 +7,10 @@ export const getCurrentUser = () => api.post("/auth/current-user"); // tera rout
 export const updateAccountDetails = (data) =>
   api.patch("/auth/update-account", data);
 
+export const forgotPassword = (data) => api.post("/auth/forgot-password", data);
+export const resetPassword = (resetToken, data) =>
+  api.post(`/auth/reset-password/${resetToken}`, data);
+
 export const updateAvatar = (formData) => {
   return api.post("/auth/update-avatar", formData, {
     headers: {

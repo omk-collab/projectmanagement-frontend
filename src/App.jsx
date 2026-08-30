@@ -11,6 +11,8 @@ import Profile from "./pages/Profile";
 import EditProfile from "./pages/EditProfile";
 import Landing from "./pages/Landing";
 import { ToastProvider } from "./context/ToastContext";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 
 
 function App() {
@@ -23,6 +25,11 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/email-verified" element={<EmailVerified />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route
+              path="/reset-password/:resetToken"
+              element={<ResetPassword />}
+            />
             <Route
               path="/profile"
               element={
