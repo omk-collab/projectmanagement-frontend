@@ -4,6 +4,7 @@ import { loginUser } from "../api/auth.api";
 import { useAuth } from "../context/AuthContext";
 import AuthVisualPanel from "../components/auth/AuthVisualPanel";
 import Spinner from "../components/common/Spinner";
+import GoogleLoginButton from "../components/auth/GoogleLoginButton";
 
 function Login() {
   const navigate = useNavigate();
@@ -137,6 +138,13 @@ function Login() {
               {loading ? "Logging in..." : "Login"}
             </button>
           </form>
+          <div className="flex items-center gap-3 my-6">
+            <div className="flex-1 h-px bg-slate-200" />
+            <span className="text-xs text-slate-400">OR</span>
+            <div className="flex-1 h-px bg-slate-200" />
+          </div>
+
+          <GoogleLoginButton />
 
           <p className="text-sm text-slate-600 mt-8 text-center">
             New here?{" "}

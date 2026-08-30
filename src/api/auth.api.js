@@ -11,6 +11,9 @@ export const forgotPassword = (data) => api.post("/auth/forgot-password", data);
 export const resetPassword = (resetToken, data) =>
   api.post(`/auth/reset-password/${resetToken}`, data);
 
+export const googleLogin = (credential) =>
+  api.post("/auth/google", { credential });
+
 export const updateAvatar = (formData) => {
   return api.post("/auth/update-avatar", formData, {
     headers: {

@@ -3,6 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { registerUser } from "../api/auth.api";
 import AuthVisualPanel from "../components/auth/AuthVisualPanel";
 import Spinner from "../components/common/Spinner";
+import GoogleLoginButton from "../components/auth/GoogleLoginButton";
 
 function Register() {
   const navigate = useNavigate();
@@ -138,6 +139,14 @@ function Register() {
               {loading ? "Registering..." : "Register"}
             </button>
           </form>
+
+          <div className="flex items-center gap-3 my-6">
+            <div className="flex-1 h-px bg-slate-200" />
+            <span className="text-xs text-slate-400">OR</span>
+            <div className="flex-1 h-px bg-slate-200" />
+          </div>
+
+          <GoogleLoginButton />
 
           <p className="text-sm text-slate-600 mt-8 text-center">
             Already have an account?{" "}
