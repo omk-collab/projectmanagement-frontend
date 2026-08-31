@@ -1,144 +1,143 @@
-# Project Camp — Frontend
+# 🚀 Project Camp — Frontend
 
-A full-stack project management application — organize projects, manage tasks with subtasks, assign team roles, and keep shared notes, all in one clean workspace.
+A full-stack project management application built to help teams organize projects, manage tasks, collaborate with members, and maintain shared notes — all in one clean workspace.
 
-**Live demo:** _add your Vercel URL here_
-**Backend repo:** _add your backend GitHub URL here_
+🔗 **Live Demo:** https://projectmanagement-omk.vercel.app/
 
-![Tech Stack](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=black)
-![Tailwind](https://img.shields.io/badge/TailwindCSS-4-06B6D4?logo=tailwindcss&logoColor=white)
-![Vite](https://img.shields.io/badge/Vite-Build-646CFF?logo=vite&logoColor=white)
+🔗 **Backend Repository:** https://github.com/omk-collab/projectmanagement-backend
 
 ---
 
 ## ✨ Features
 
-### Authentication
-- Register / Login with JWT (access + refresh tokens)
-- Email verification on sign-up
-- Forgot / reset password flow
-- Persistent sessions with automatic token refresh
+### 🔐 Authentication
 
-### Projects
-- Create, view, and manage multiple projects
-- Search and sort projects on the dashboard
-- Role-based access per project — **Admin**, **Project Admin**, **Member**
+- User registration and login
+- JWT authentication with access and refresh tokens
+- Email verification
+- Forgot and reset password functionality
+- Persistent user sessions
+- Automatic token refresh
 
-### Tasks & Subtasks
-- Kanban-style board — To Do / In Progress / Done
+### 📁 Projects
+
+- Create and manage multiple projects
+- View project details
+- Search projects
+- Sort projects by name, members, or recent activity
+- Role-based project access
+- Admin, Project Admin, and Member roles
+
+### ✅ Tasks & Subtasks
+
+- Kanban-style task board
+- To Do / In Progress / Done task statuses
 - Assign tasks to team members
-- Inline editable task titles
-- Change task status directly from the task view
-- Subtasks with progress tracking and completion toggles
+- Edit task titles
+- Update task status
+- Create and manage subtasks
+- Track subtask completion and progress
 
-### Team & Collaboration
-- Invite members by email with a specific role
-- Update or remove team members (Admin only)
-- Shared project notes with edit/delete (Admin only)
+### 👥 Team Collaboration
 
-### UX details
-- Toast notifications for every action (success/error)
-- Confirmation dialogs before destructive actions (delete/remove)
-- Loading skeletons and spinners
-- Friendly, specific error messages (not just "failed")
-- Responsive design across devices
+- Add members to projects using email
+- Assign specific project roles
+- Update member roles
+- Remove members
+- Admin-only member management
+
+### 📝 Shared Notes
+
+- Create project notes
+- View shared notes
+- Edit notes
+- Delete notes
+- Admin-controlled note management
+
+### 🎨 User Experience
+
+- Responsive interface
+- Toast notifications
+- Confirmation dialogs for destructive actions
+- Loading spinners and skeleton states
+- Search and sorting
+- Clean and simple dashboard
+- Mobile-friendly design
 
 ---
 
 ## 🛠 Tech Stack
 
-**Frontend**
-- React (Vite)
+### Frontend
+
+- React
+- Vite
 - React Router
 - Tailwind CSS
 - Axios
-- Lucide React (icons)
+- Lucide React
 
-**Backend** (see [backend repo](#))
-- Node.js / Express
-- MongoDB + Mongoose
-- JWT authentication
-- Nodemailer (email verification & password reset)
+### Backend
 
-**Deployment**
-- Frontend: Vercel
-- Backend: Render
-- Database: MongoDB Atlas
+- Node.js
+- Express.js
+- MongoDB
+- Mongoose
+- JWT
+- Nodemailer
 
----
+### Deployment
 
-## 📂 Project Structure
-
-```
-src/
-├── api/            # Axios instances & API call functions
-├── components/
-│   ├── auth/       # Auth visual panel
-│   ├── common/     # Spinner, ConfirmDialog
-│   ├── layout/     # Navbar, ProfileMenu
-│   └── project/    # MembersPanel, NotesPanel
-├── context/        # AuthContext, ToastContext
-├── pages/          # Landing, Login, Register, Dashboard, ProjectDetails, TaskDetails, Profile
-├── App.jsx
-└── main.jsx
-```
-
----
-
-## 🚀 Getting Started
-
-### Prerequisites
-- Node.js (v18+)
-- A running instance of the [backend](#) (local or deployed)
-
-### Installation
-
-```bash
-git clone https://github.com/omk-collab/projectmanagement-frontend.git
-cd projectmanagement-frontend
-npm install
-```
-
-### Environment Variables
-
-Create a `.env` file in the root:
-
-```
-VITE_API_BASE_URL=http://localhost:9000/api/v1
-```
-
-(Replace with your deployed backend URL in production.)
-
-### Run locally
-
-```bash
-npm run dev
-```
-
-App runs at `http://localhost:5173`
+- Frontend — Vercel
+- Backend — Render
+- Database — MongoDB Atlas
 
 ---
 
 ## 📸 Screenshots
 
-_Add screenshots of your Landing page, Dashboard, and Task board here — this section makes the biggest difference for anyone browsing the repo without running it locally._
+### 🏠 Landing Page
 
-```
-![Landing Page](screenshots/Screenshot 2026-08-31 223858.png)
-![Dashboard](./screenshots/dashboard.png)
-![Task Board](./screenshots/tasks.png)
-```
+![Landing Page](./screenshots/Screenshot%202026-08-31%20223858.png)
 
----
+### 📊 Dashboard
 
-## 🔗 Connect
+![Dashboard](./screenshots/Screenshot%202026-08-31%20225522.png)
 
-- **GitHub:** [github.com/omk-collab](https://github.com/omk-collab)
-- **LinkedIn:** [linkedin.com/in/om-khairnar-scoe](https://www.linkedin.com/in/om-khairnar-scoe/)
-- **Email:** omkhairnar49@gmail.com
+### 📋 Task Board
+
+![Task Board](./screenshots/Screenshot%202026-08-31%20230917.png)
 
 ---
 
-## 📄 License
+## 📂 Project Structure
 
-This project is for learning and educational purposes.
+```text
+src/
+├── api/
+│   ├── auth.api.js
+│   ├── project.api.js
+│   ├── task.api.js
+│   └── note.api.js
+│
+├── components/
+│   ├── auth/
+│   ├── common/
+│   ├── layout/
+│   └── project/
+│
+├── context/
+│   ├── AuthContext.jsx
+│   └── ToastContext.jsx
+│
+├── pages/
+│   ├── Landing.jsx
+│   ├── Login.jsx
+│   ├── Register.jsx
+│   ├── Dashboard.jsx
+│   ├── ProjectDetails.jsx
+│   ├── TaskDetails.jsx
+│   └── Profile.jsx
+│
+├── App.jsx
+└── main.jsx
