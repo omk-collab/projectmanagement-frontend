@@ -124,7 +124,7 @@ App runs at `http://localhost:5173`
 _Add screenshots of your Landing page, Dashboard, and Task board here — this section makes the biggest difference for anyone browsing the repo without running it locally._
 
 ```
-![Landing Page](./screenshots/landing.png)
+![Landing Page](screenshots/Screenshot 2026-08-31 223858.png)
 ![Dashboard](./screenshots/dashboard.png)
 ![Task Board](./screenshots/tasks.png)
 ```
